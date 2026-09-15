@@ -1,19 +1,38 @@
 async function loadStarred() {
   const container = document.getElementById('starred-list');
   if (!container) return;
-  container.innerHTML = '<p>Loading starred repositories…</p>';
+  container.textContent = '';
+  const loading = document.createElement('p');
+  loading.textContent = 'Loading starred repositories…';
+  container.appendChild(loading);
+
+  // 10s timeout for fetch
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
+
   try {
-    const res = await fetch('events.json');
+    const res = await fetch('events.json', { signal: controller.signal });
+    clearTimeout(timeoutId);
     if (!res.ok) throw new Error('Network response was not ok');
     const data = await res.json();
+    if (!Array.isArray(data)) throw new Error('Invalid data format');
     renderList(container, data);
   } catch (err) {
-    container.innerHTML = `<p>Error loading data: ${err.message}</p>`;
+    container.textContent = '';
+    const errP = document.createElement('p');
+    errP.textContent = 'Error loading data: ' + (err && err.message ? err.message : String(err));
+    container.appendChild(errP);
+
+    const retry = document.createElement('button');
+    retry.type = 'button';
+    retry.textContent = 'Retry';
+    retry.addEventListener('click', () => loadStarred());
+    container.appendChild(retry);
   }
 }
 
 function renderList(container, items) {
-  container.innerHTML = '';
+  container.textContent = '';
   if (!items || items.length === 0) {
     container.textContent = 'No starred repositories found.';
     return;
@@ -30,6 +49,7 @@ function renderList(container, items) {
     a.target = '_blank';
     a.rel = 'noopener noreferrer';
     a.textContent = repo.name || 'Unknown repository';
+    a.setAttribute('aria-label', repo.name || 'Repository');
     h2.appendChild(a);
 
     const desc = document.createElement('p');
@@ -49,7 +69,8 @@ function renderList(container, items) {
     const time = document.createElement('time');
     if (item.starred_at) {
       time.dateTime = item.starred_at;
-      time.textContent = new Date(item.starred_at).toLocaleString();
+      const d = new Date(item.starred_at);
+      if (!isNaN(d)) time.textContent = d.toLocaleString();
     }
 
     if (lang.textContent) meta.appendChild(lang);
