@@ -1,0 +1,35 @@
+[
+  {
+    "id": "1",
+    "repo": {
+      "name": "octocat/Hello-World",
+      "html_url": "https://github.com/octocat/Hello-World",
+      "description": "My first repository on GitHub!",
+      "language": "Ruby",
+      "stargazers_count": 1523
+    },
+    "starred_at": "2026-09-10T12:34:56Z"
+  },
+  {
+    "id": "2",
+    "repo": {
+      "name": "vercel/next.js",
+      "html_url": "https://github.com/vercel/next.js",
+      "description": "The React Framework for Production",
+      "language": "TypeScript",
+      "stargazers_count": 120000
+    },
+    "starred_at": "2026-06-01T08:15:00Z"
+  },
+  {
+    "id": "3",
+    "repo": {
+      "name": "electron/electron",
+      "html_url": "https://github.com/electron/electron",
+      "description": "Build cross-platform desktop apps with JavaScript, HTML, and CSS",
+      "language": "C++",
+      "stargazers_count": 100000
+    },
+    "starred_at": "2025-12-25T00:00:00Z"
+  }
+]
